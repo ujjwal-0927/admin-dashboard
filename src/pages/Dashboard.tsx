@@ -13,7 +13,6 @@ export default function Dashboard() {
     .reduce((acc, curr) => acc + curr.total, 0);
 
   const activeProducts = products.filter(p => p.status === 'Active').length;
-  const pendingOrders = orders.filter(o => o.status === 'Pending').length;
 
   // Chart Data: Orders per day (Simple grouping by date string)
   const ordersByDate = orders.reduce((acc: any, order) => {
@@ -85,7 +84,7 @@ export default function Dashboard() {
                 paddingAngle={5}
                 dataKey="value"
               >
-                {statusData.map((entry, index) => (
+                {statusData.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>

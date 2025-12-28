@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import productsReducer from './productsSlice';
 import ordersReducer from './ordersSlice';
 
@@ -24,11 +24,15 @@ const saveState = (state: any) => {
   }
 };
 
-const store = configureStore({
-  reducer: {
-    products: productsReducer,
-    orders: ordersReducer,
-  },
+const rootReducer = combineReducers({
+  products: productsReducer,
+  orders: ordersReducer,
+});
+
+export const store = configureStore({
+  reducer: rootReducer,
+  // Fix: Removed explicit casting to 'PreloadedState'
+  // loadState() returns 'any', which is valid here.
   preloadedState: loadState(),
 });
 
@@ -36,6 +40,5 @@ store.subscribe(() => {
   saveState(store.getState());
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;
-export default store;
