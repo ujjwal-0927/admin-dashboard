@@ -1,5 +1,3 @@
-// Type definitions for the admin dashboard application
-
 export interface Product {
   id: string;
   name: string;
@@ -13,13 +11,15 @@ export interface Product {
 
 export interface OrderItem {
   productId: string;
+  name: string; // Cached name in case product is deleted
+  price: number; // Snapshot of price at purchase
   qty: number;
 }
 
 export interface Order {
   id: string;
   customerName: string;
-  date: string;
+  date: string; // ISO String
   total: number;
   status: 'Pending' | 'Completed' | 'Cancelled';
   items: OrderItem[];

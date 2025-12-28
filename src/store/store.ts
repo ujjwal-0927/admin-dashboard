@@ -1,8 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import productsReducer from './productsSlice';
-import ordersReducer from './ordersSlice'; // (You create this similar to products)
+import ordersReducer from './ordersSlice';
 
-// Load state from localStorage
 const loadState = () => {
   try {
     const serializedState = localStorage.getItem('reduxState');
@@ -13,16 +12,15 @@ const loadState = () => {
   }
 };
 
-// Save state (excluding loading status) [cite: 62]
 const saveState = (state: any) => {
   try {
     const serializedState = JSON.stringify({
-      products: { items: state.products.items }, // Only persist data, not status
-      orders: { items: state.orders.items }
+      products: { items: state.products.items, status: 'idle' },
+      orders: { items: state.orders.items, status: 'idle' }
     });
     localStorage.setItem('reduxState', serializedState);
   } catch {
-    // ignore write errors
+    // ignore
   }
 };
 
@@ -31,10 +29,9 @@ const store = configureStore({
     products: productsReducer,
     orders: ordersReducer,
   },
-  preloadedState: loadState(), // Rehydration [cite: 10]
+  preloadedState: loadState(),
 });
 
-// Subscribe to store updates to save to localStorage
 store.subscribe(() => {
   saveState(store.getState());
 });
